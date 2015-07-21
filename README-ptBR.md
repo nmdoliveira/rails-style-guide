@@ -1,83 +1,66 @@
-# Prelude
+# Prelúdio
 
-> Role models are important. <br/>
-> -- Officer Alex J. Murphy / RoboCop
+> Exemplos são importantes. <br/>
+> -- Oficial Alex J. Murphy / RoboCop
 
-The goal of this guide is to present a set of best practices and style
-prescriptions for Ruby on Rails 4 development. It's a
-complementary guide to the already existing community-driven
-[Ruby coding style guide](https://github.com/bbatsov/ruby-style-guide).
+O objetivo desse guia é apresentar um conjunto de boas práticas e orientações de estilo para o desenvolvimento em Ruby on Rails 4. Esse guia é complementar ao já existente [guia de estilo de programação em Ruby](https://github.com/bbatsov/ruby-style-guide), criado pela comunidade.
 
-Some of the advice here is applicable only to Rails 4.0+.
+Alguns dos conselhos apresentados aqui só se aplicam ao Rails 4.0+.
 
-You can generate a PDF or an HTML copy of this guide using
-[Transmuter](https://github.com/TechnoGate/transmuter).
+Você pode gerar uma cópia desse guia em PDF ou HTML usando o [Transmuter](https://github.com/TechnoGate/transmuter).
 
-Translations of the guide are available in the following languages:
+Traduções desse guia estão disponíveis nos seguintes idiomas:
 
-* [Chinese Simplified](https://github.com/JuanitoFatas/rails-style-guide/blob/master/README-zhCN.md)
-* [Chinese Traditional](https://github.com/JuanitoFatas/rails-style-guide/blob/master/README-zhTW.md)
-* [German](https://github.com/arbox/de-rails-style-guide/blob/master/README-deDE.md)
-* [Japanese](https://github.com/satour/rails-style-guide/blob/master/README-jaJA.md)
-* [Russian](https://github.com/arbox/rails-style-guide/blob/master/README-ruRU.md)
-* [Turkish](https://github.com/tolgaavci/rails-style-guide/blob/master/README-trTR.md)
-* [Korean](https://github.com/pureugong/rails-style-guide/blob/master/README-koKR.md)
-* [Brazilian Portuguese](https://github.com/nmdoliveira/rails-style-guide/blob/master/README-ptBR.md)
+* [Chinês simplificado](https://github.com/JuanitoFatas/rails-style-guide/blob/master/README-zhCN.md)
+* [Chinês tradicional](https://github.com/JuanitoFatas/rails-style-guide/blob/master/README-zhTW.md)
+* [Alemão](https://github.com/arbox/de-rails-style-guide/blob/master/README-deDE.md)
+* [Japonês](https://github.com/satour/rails-style-guide/blob/master/README-jaJA.md)
+* [Russo](https://github.com/arbox/rails-style-guide/blob/master/README-ruRU.md)
+* [Turco](https://github.com/tolgaavci/rails-style-guide/blob/master/README-trTR.md)
+* [Coreano](https://github.com/pureugong/rails-style-guide/blob/master/README-koKR.md)
+* Português brasileiro
 
-# The Rails Style Guide
+# O Guia de Estilo do Rails
 
-This Rails style guide recommends best practices so that real-world Rails
-programmers can write code that can be maintained by other real-world Rails
-programmers. A style guide that reflects real-world usage gets used, and a
-style guide that holds to an ideal that has been rejected by the people it
-is supposed to help risks not getting used at all &ndash; no matter how good
-it is.
+Esse guia de estido do Rails recomenda boas práticas para que programadores Rails reais escrevam código que possa ser mantido por outros programadores Rails reais. Um guia de estilo que reflete o uso real é usado, enquanto um guia de estido que se apega a um ideal que foi rejeitado pelas pessoas que ele deveria ajudar está sob risco de cair em desuso &ndash; não importa o quão bom ele seja.
 
-The guide is separated into several sections of related rules. I've tried to add
-the rationale behind the rules (if it's omitted I've assumed it's pretty
-obvious).
+Esse guia está dividido em várias seções de regras relacionadas. Eu tentei incluir o motivo por trás das regras (se ele foi omitido, é porque eu assumi que é óbvio).
 
-I didn't come up with all the rules out of nowhere - they are mostly based on my
-extensive career as a professional software engineer, feedback and suggestions
-from members of the Rails community and various highly regarded Rails
-programming resources.
+Eu não inventei essas regras do nada - elas são baseadas principalmente na minha extensa carreira como engenheiro de software profissional, feedback e sugestões de membros da comunidade Rails e vários outros recursos conceituados de programação Rails. 
 
-## Table of Contents
+## Sumário
 
-* [Configuration](#configuration)
-* [Routing](#routing)
+* [Configuração](#configuração)
+* [Roteamento](#roteamento)
 * [Controllers](#controllers)
 * [Models](#models)
   * [ActiveRecord](#activerecord)
-  * [ActiveRecord Queries](#activerecord-queries)
-* [Migrations](#migrations)
+  * [Consultas com ActiveRecord](#consultas-com-activerecord)
+* [Migrações](#migrações)
 * [Views](#views)
-* [Internationalization](#internationalization)
+* [Internacionalização](#internacionalização)
 * [Assets](#assets)
 * [Mailers](#mailers)
-* [Time](#time)
+* [Tempo](#tempo)
 * [Bundler](#bundler)
-* [Flawed Gems](#flawed-gems)
-* [Managing processes](#managing-processes)
+* [Gems problemáticas](#gems-problemáticas)
+* [Gerenciando processos](#gerenciando-processos)
 
-## Configuration
+## Configuração
 
 * <a name="config-initializers"></a>
-  Put custom initialization code in `config/initializers`. The code in
-  initializers executes on application startup.
+  Coloque suas rotinas de inicialização em `config/initializers`. Os arquivos dessa pasta são executados quando a aplicação é iniciada.
 <sup>[[link](#config-initializers)]</sup>
 
 * <a name="gem-initializers"></a>
-  Keep initialization code for each gem in a separate file with the same name
-  as the gem, for example `carrierwave.rb`, `active_admin.rb`, etc.
+  Deixe o código de inicialização de cada gem num arquivo separado com o mesmo nome da gem, por exemplo, `carrierwave.rb`, `active_admin.rb`, etc.
 <sup>[[link](#gem-initializers)]</sup>
 
 * <a name="dev-test-prod-configs"></a>
-  Adjust accordingly the settings for development, test and production
-  environment (in the corresponding files under `config/environments/`)
+  Ajuste adequadamente as configurações para os ambientes de desenvolvimento, teste e produção (nos respectivos arquivos em `config/environments/`).
 <sup>[[link](#dev-test-prod-configs)]</sup>
 
-  * Mark additional assets for precompilation (if any):
+  * Marque assets adicionais para serem pré-compilados (se houver):
 
     ```Ruby
     # config/environments/production.rb
@@ -87,76 +70,71 @@ programming resources.
     ```
 
 * <a name="app-config"></a>
-  Keep configuration that's applicable to all environments in the
-  `config/application.rb` file.
+  Deixe as configurações que se aplicam a todos os ambientes no arquivo `config/application.rb`.
 <sup>[[link](#app-config)]</sup>
 
 * <a name="staging-like-prod"></a>
-  Create an additional `staging` environment that closely resembles the
-  `production` one.
+  Crie um ambiente adicional chamado `staging` que se assemelhe ao ambiente `production`.
 <sup>[[link](#staging-like-prod)]</sup>
 
 * <a name="yaml-config"></a>
-  Keep any additional configuration in YAML files under the `config/` directory.
+  Deixe quaisquer configurações adicionais em arquivos YAML na pasta `config/`.
 <sup>[[link](#yaml-config)]</sup>
 
-  Since Rails 4.2 YAML configuration files can be easily loaded with the new `config_for` method:
+  Desde o Rails 4.2, arquivos de configuração YAML podem ser carregados facilmente com o novo método `config_for`:
 
   ```Ruby
   Rails::Application.config_for(:yaml_file)
   ```
 
-## Routing
+## Roteamento
 
 * <a name="member-collection-routes"></a>
-  When you need to add more actions to a RESTful resource (do you really need
-  them at all?) use `member` and `collection` routes.
+  Quando você precisar adicionar mais ações a um recurso RESTful (você precisa mesmo delas?) use as rotas `member` e `collection`.
 <sup>[[link](#member-collection-routes)]</sup>
 
   ```Ruby
-  # bad
+  # ruim
   get 'subscriptions/:id/unsubscribe'
   resources :subscriptions
 
-  # good
+  # bom
   resources :subscriptions do
     get 'unsubscribe', on: :member
   end
 
-  # bad
+  # ruim
   get 'photos/search'
   resources :photos
 
-  # good
+  # bom
   resources :photos do
     get 'search', on: :collection
   end
   ```
 
 * <a name="many-member-collection-routes"></a>
-  If you need to define multiple `member/collection` routes use the
-  alternative block syntax.
+  Se você quiser definir múltiplas rotas `member/collection`, use a sintaxe alternativa que recebe um bloco.
 <sup>[[link](#many-member-collection-routes)]</sup>
 
   ```Ruby
   resources :subscriptions do
     member do
       get 'unsubscribe'
-      # more routes
+      # mais rotas
     end
   end
 
   resources :photos do
     collection do
       get 'search'
-      # more routes
+      # mais rotas
     end
   end
   ```
 
 * <a name="nested-routes"></a>
-  Use nested routes to express better the relationship between ActiveRecord
-  models.
+  Use rotas aninhadas para expressar melhor o relacionamento entre models do ActiveRecord.
 <sup>[[link](#nested-routes)]</sup>
 
   ```Ruby
@@ -175,7 +153,7 @@ programming resources.
   ```
   
 * <a name="namespaced-routes"></a>
-  If you need to nest routes more than 1 level deep then use the `shallow: true` option. This will save user from long urls `posts/1/comments/5/versions/7/edit` and you from long url helpers `edit_post_comment_version`.
+  Se você precisar aninhar rotas com mais de 1 nível de profundidade, use a opção `shallow: true`. Isso vai poupar seu usuário de urls longas `posts/1/comments/5/versions/7/edit` e também vai te poupar de helpers longos `edit_post_comment_version`.
   
   ```Ruby
   resources :posts, shallow: true do
@@ -186,62 +164,56 @@ programming resources.
   ```
 
 * <a name="namespaced-routes"></a>
-  Use namespaced routes to group related actions.
+  Defina rotas dentro de um `namespace` para agrupar ações relacionadas.
 <sup>[[link](#namespaced-routes)]</sup>
 
   ```Ruby
   namespace :admin do
-    # Directs /admin/products/* to Admin::ProductsController
+    # Direciona /admin/products/* para Admin::ProductsController
     # (app/controllers/admin/products_controller.rb)
     resources :products
   end
   ```
 
 * <a name="no-wild-routes"></a>
-  Never use the legacy wild controller route. This route will make all actions
-  in every controller accessible via GET requests.
+  Nunca use a antiga rota 'wild'. Essa rota vai deixar todas as ações em todos os controllers acessíveis via requisições GET.
 <sup>[[link](#no-wild-routes)]</sup>
 
   ```Ruby
-  # very bad
+  # muito ruim
   match ':controller(/:action(/:id(.:format)))'
   ```
 
 * <a name="no-match-routes"></a>
-  Don't use `match` to define any routes unless there is need to map multiple request types among `[:get, :post, :patch, :put, :delete]` to a single action using `:via` option.
+  Não use `match` para definir nenhuma rota, a não ser que você precise mapear múltiplos métodos de requisição dentre `[:get, :post, :patch, :put, :delete]` para uma mesma ação através da opção `:via`.
 <sup>[[link](#no-match-routes)]</sup>
 
 ## Controllers
 
 * <a name="skinny-controllers"></a>
-  Keep the controllers skinny - they should only retrieve data for the view
-  layer and shouldn't contain any business logic (all the business logic
-  should naturally reside in the model).
+  Mantenha os controllers enxutos - eles só devem obter dados para a camada de view e não devem conter nenhuma lógica de negócio (toda a lógica de negócio deve ficar naturalmente no model).
 <sup>[[link](#skinny-controllers)]</sup>
 
 * <a name="one-method"></a>
-  Each controller action should (ideally) invoke only one method other than an
-  initial find or new.
+  Cada ação de um controller deve (idealmente) invocar apenas um método além de um `find` ou `new` inicial.
 <sup>[[link](#one-method)]</sup>
 
 * <a name="shared-instance-variables"></a>
-  Share no more than two instance variables between a controller and a view.
+  Não compartilhe mais que duas variáveis de instância entre um controller e uma view.
 <sup>[[link](#shared-instance-variables)]</sup>
 
 ## Models
 
 * <a name="model-classes"></a>
-  Introduce non-ActiveRecord model classes freely.
+  Introduza classes não-ActiveRecord livremente.
 <sup>[[link](#model-classes)]</sup>
 
 * <a name="meaningful-model-names"></a>
-  Name the models with meaningful (but short) names without abbreviations.
+  Dê nomes significativos (porém curtos) para os models, sem abreviações.
 <sup>[[link](#meaningful-model-names)]</sup>
 
 * <a name="activeattr-gem"></a>
-  If you need model objects that support ActiveRecord behavior (like validation)
-  without the ActiveRecord database functionality use the
-  [ActiveAttr](https://github.com/cgriego/active_attr) gem.
+  Se você precisar de objetos do model que suportem comportamento do ActiveRecord, mas sem a funcionalidade de banco de dados, use a gem [ActiveAttr(https://github.com/cgriego/active_attr)].
 <sup>[[link](#activeattr-gem)]</sup>
 
   ```Ruby
@@ -261,18 +233,17 @@ programming resources.
   end
   ```
 
-  For a more complete example refer to the
-  [RailsCast on the subject](http://railscasts.com/episodes/326-activeattr).
+  Para um exemplo mais completo, veja o
+  [RailsCast sobre isso](http://railscasts.com/episodes/326-activeattr).
 
 ### ActiveRecord
 
 * <a name="keep-ar-defaults"></a>
-  Avoid altering ActiveRecord defaults (table names, primary key, etc) unless
-  you have a very good reason (like a database that's not under your control).
+  Evite alterar os padrões do ActiveRecord (nomes de tabelas, chave primária, etc) a não ser que você tenha uma razão muito boa (como um banco de dados que você não controla).
 <sup>[[link](#keep-ar-defaults)]</sup>
 
   ```Ruby
-  # bad - don't do this if you can modify the schema
+  # ruim - não faça isso se você puder modificar o schema
   class Transaction < ActiveRecord::Base
     self.table_name = 'order'
     ...
@@ -280,52 +251,50 @@ programming resources.
   ```
 
 * <a name="macro-style-methods"></a>
-  Group macro-style methods (`has_many`, `validates`, etc) in the beginning of
-  the class definition.
+  Agrupe métodos no estilo macro (`has_many`, `validates`, etc) no topo da definição da classe.
 <sup>[[link](#macro-style-methods)]</sup>
 
   ```Ruby
   class User < ActiveRecord::Base
-    # keep the default scope first (if any)
+    # deixe a default_scope primeiro (se houver)
     default_scope { where(active: true) }
 
-    # constants come up next
+    # depois vêm as constantes
     COLORS = %w(red green blue)
 
-    # afterwards we put attr related macros
+    # depois nós colocamos macros relacionadas a attr
     attr_accessor :formatted_date_of_birth
 
     attr_accessible :login, :first_name, :last_name, :email, :password
 
-    # followed by association macros
+    # seguidas de macros de associações
     belongs_to :country
 
     has_many :authentications, dependent: :destroy
 
-    # and validation macros
+    # e macros de validação
     validates :email, presence: true
     validates :username, presence: true
     validates :username, uniqueness: { case_sensitive: false }
     validates :username, format: { with: /\A[A-Za-z][A-Za-z0-9._-]{2,19}\z/ }
     validates :password, format: { with: /\A\S{8,128}\z/, allow_nil: true}
 
-    # next we have callbacks
+    # depois nós colocamos os callbacks
     before_save :cook
     before_save :update_username_lower
 
-    # other macros (like devise's) should be placed after the callbacks
+    # outras macros (como as do devise) devem ser colocadas depois dos callbacks
 
     ...
   end
   ```
 
 * <a name="has-many-through"></a>
-  Prefer `has_many :through` to `has_and_belongs_to_many`. Using `has_many
-  :through` allows additional attributes and validations on the join model.
+  Prefira `has_many :through` a `has_and_belongs_to_many`. Usando `has_many :through` você pode adicionar atributos e validações adicionais no modelo de junção.
 <sup>[[link](#has-many-through)]</sup>
 
   ```Ruby
-  # not so good - using has_and_belongs_to_many
+  # não muito bom - usando has_and_belongs_to_many
   class User < ActiveRecord::Base
     has_and_belongs_to_many :groups
   end
@@ -334,7 +303,7 @@ programming resources.
     has_and_belongs_to_many :users
   end
 
-  # prefered way - using has_many :through
+  # jeito melhor - usando has_many :through
   class User < ActiveRecord::Base
     has_many :memberships
     has_many :groups, through: :memberships
@@ -352,63 +321,61 @@ programming resources.
   ```
 
 * <a name="read-attribute"></a>
-  Prefer `self[:attribute]` over `read_attribute(:attribute)`.
+  Prefira `self[:attribute]` a `read_attribute(:attribute)`.
 <sup>[[link](#read-attribute)]</sup>
 
   ```Ruby
-  # bad
+  # ruim
   def amount
     read_attribute(:amount) * 100
   end
 
-  # good
+  # bom
   def amount
     self[:amount] * 100
   end
   ```
 
 * <a name="write-attribute"></a>
-  Prefer `self[:attribute] = value` over `write_attribute(:attribute, value)`.
+  Prefira `self[:attribute] = value` a `write_attribute(:attribute, value)`.
 <sup>[[link](#write-attribute)]</sup>
 
   ```Ruby
-  # bad
+  # ruim
   def amount
     write_attribute(:amount, 100)
   end
 
-  # good
+  # bom
   def amount
     self[:amount] = 100
   end
   ```
 
 * <a name="sexy-validations"></a>
-  Always use the new ["sexy"
-  validations](http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/).
+  Sempre use as novas [validações "sexy"](http://thelucid.com/2010/01/08/sexy-validation-in-edge-rails-rails-3/).
 <sup>[[link](#sexy-validations)]</sup>
 
   ```Ruby
-  # bad
+  # ruim
   validates_presence_of :email
   validates_length_of :email, maximum: 100
 
-  # good
+  # bom
   validates :email, presence: true, length: { maximum: 100 }
   ```
 
 * <a name="custom-validator-file"></a>
-  When a custom validation is used more than once or the validation is some
-  regular expression mapping, create a custom validator file.
+  Quando uma validação personalizada é usada mais que uma vez, ou a validação é um mapeamento de expressões regulares, crie uma nova classe de validação.
 <sup>[[link](#custom-validator-file)]</sup>
 
   ```Ruby
-  # bad
+  # ruim
   class Person
     validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
   end
 
-  # good
+  # bom
   class EmailValidator < ActiveModel::EachValidator
     def validate_each(record, attribute, value)
       record.errors[attribute] << (options[:message] || 'is not a valid email') unless value =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
@@ -421,16 +388,15 @@ programming resources.
   ```
 
 * <a name="app-validators"></a>
-  Keep custom validators under `app/validators`.
+  Deixe os seus validadores em `app/validators/`.
 <sup>[[link](#app-validators)]</sup>
 
 * <a name="custom-validators-gem"></a>
-  Consider extracting custom validators to a shared gem if you're maintaining
-  several related apps or the validators are generic enough.
+  Considere extrair seus validadores próprios para uma gem compartilhada se você estiver mantendo vários apps relacionados ou se os validadores forem genéricos o suficiente.
 <sup>[[link](#custom-validators-gem)]</sup>
 
 * <a name="named-scopes"></a>
-  Use named scopes freely.
+  Use escopos nomeados livremente.
 <sup>[[link](#named-scopes)]</sup>
 
   ```Ruby
@@ -443,10 +409,7 @@ programming resources.
   ```
 
 * <a name="named-scope-class"></a>
-  When a named scope defined with a lambda and parameters becomes too
-  complicated, it is preferable to make a class method instead which serves the
-  same purpose of the named scope and returns an `ActiveRecord::Relation`
-  object. Arguably you can define even simpler scopes like this.
+  Quando um escopo nomeado definido com um lambda e parâmetros ficar muito complicado, é preferível fazer ao invés dele um método de classe que sirva para o mesmo propósito e retorne uma instância de `ActiveRecord::Relation`. Você pode até definir escopos mais simples desse jeito.
 
 <sup>[[link](#named-scope-class)]</sup>
 
@@ -458,10 +421,10 @@ programming resources.
   end
   ```
 
-  Note that this style of scoping cannot be chained in the same way as named scopes. For instance:
+  Perceba que esse estilo de escopo não pode ser colocado em chain do mesmo jeito que escopos nomeados. Por exemplo:
 
   ```Ruby
-  # unchainable
+  # não dá pra fazer chain
   class User < ActiveRecord::Base
     def User.old
       where('age > ?', 80)
@@ -473,10 +436,10 @@ programming resources.
   end
   ```
 
-  In this style both `old` and `heavy` work individually, but you cannot call `User.old.heavy`, to chain these scopes use:
+  Nesse estilo, tanto `old` como `heavy` funcionam separadamente, mas você não pode chamar `User.old.heavy`; para fazer chain nesses escopos, use:
 
   ```Ruby
-  # chainable
+  # dá pra fazer chain
   class User < ActiveRecord::Base
     scope :old, -> { where('age > 60') }
     scope :heavy, -> { where('weight > 200') }
@@ -485,15 +448,11 @@ programming resources.
 
 
 * <a name="beware-update-attribute"></a>
-  Beware of the behavior of the
-  [`update_attribute`](http://api.rubyonrails.org/classes/ActiveRecord/Persistence.html#method-i-update_attribute)
-  method. It doesn't run the model validations (unlike `update_attributes`) and
-  could easily corrupt the model state.
+  Tome cuidado com o comportamento do método [`update_attribute`](http://api.rubyonrails.org/classes/ActiveRecord/Persistence.html#method-i-update_attribute). Ele não executa as validações do model (diferente de `update_attributes`) e pode facilmente corromper o estado do model.
 <sup>[[link](#beware-update-attribute)]</sup>
 
 * <a name="user-friendly-urls"></a>
-  Use user-friendly URLs. Show some descriptive attribute of the model in the URL
-  rather than its `id`.  There is more than one way to achieve this:
+  Use URLs amigáveis. Mostre algum atributo descritivo do model na URL ao invés do `id` dele. Há várias formas de conseguir isso:
 <sup>[[link](#user-friendly-urls)]</sup>
 
   * Override the `to_param` method of the model. This method is used by Rails
