@@ -1,4 +1,4 @@
-# Prelúdio
+# Introdução
 
 > Exemplos são importantes. <br/>
 > -- Oficial Alex J. Murphy / RoboCop
@@ -22,9 +22,9 @@ Traduções desse guia estão disponíveis nos seguintes idiomas:
 
 # O Guia de Estilo do Rails
 
-Esse guia de estido do Rails recomenda boas práticas para que programadores Rails reais escrevam código que possa ser mantido por outros programadores Rails reais. Um guia de estilo que reflete o uso real é usado, enquanto um guia de estido que se apega a um ideal que foi rejeitado pelas pessoas que ele deveria ajudar está sob risco de cair em desuso &ndash; não importa o quão bom ele seja.
+Esse guia de estilo do Rails recomenda boas práticas para que programadores Rails reais escrevam código que possa ser mantido por outros programadores Rails reais. Se um guia de estilo reflete o uso real, ele é usado; porém, um guia de estilo que se apega a um ideal que foi rejeitado pelas pessoas que ele deveria ajudar fica sob risco de cair em desuso &ndash; não importa o quão bom ele seja.
 
-Esse guia está dividido em várias seções de regras relacionadas. Eu tentei incluir o motivo por trás das regras (se ele foi omitido, é porque eu assumi que é óbvio).
+Esse guia está dividido em várias seções de regras relacionadas. Eu tentei incluir o motivo por trás das regras (se ele foi omitido, é porque eu assumi que é bastante óbvio).
 
 Eu não inventei essas regras do nada - elas são baseadas principalmente na minha extensa carreira como engenheiro de software profissional, feedback e sugestões de membros da comunidade Rails e vários outros recursos conceituados de programação Rails. 
 
@@ -35,13 +35,13 @@ Eu não inventei essas regras do nada - elas são baseadas principalmente na min
 * [Controllers](#controllers)
 * [Models](#models)
   * [ActiveRecord](#activerecord)
-  * [Consultas com ActiveRecord](#consultas-com-activerecord)
+  * [Consultas com o ActiveRecord](#consultas-com-o-activerecord)
 * [Migrações](#migrações)
 * [Views](#views)
 * [Internacionalização](#internacionalização)
 * [Assets](#assets)
 * [Mailers](#mailers)
-* [Tempo](#tempo)
+* [Hora](#hora)
 * [Bundler](#bundler)
 * [Gems problemáticas](#gems-problemáticas)
 * [Gerenciando processos](#gerenciando-processos)
@@ -74,14 +74,14 @@ Eu não inventei essas regras do nada - elas são baseadas principalmente na min
 <sup>[[link](#app-config)]</sup>
 
 * <a name="staging-like-prod"></a>
-  Crie um ambiente adicional chamado `staging` que se assemelhe ao ambiente `production`.
+  Crie um ambiente adicional chamado `staging` que seja muito parecido com o ambiente `production`.
 <sup>[[link](#staging-like-prod)]</sup>
 
 * <a name="yaml-config"></a>
   Deixe quaisquer configurações adicionais em arquivos YAML na pasta `config/`.
 <sup>[[link](#yaml-config)]</sup>
 
-  Desde o Rails 4.2, arquivos de configuração YAML podem ser carregados facilmente com o novo método `config_for`:
+  Desde o Rails 4.2, é muito simples carregar arquivos de configuração YAML com o novo método `config_for`:
 
   ```Ruby
   Rails::Application.config_for(:yaml_file)
@@ -454,11 +454,8 @@ Eu não inventei essas regras do nada - elas são baseadas principalmente na min
 * <a name="user-friendly-urls"></a>
   Use URLs amigáveis. Mostre algum atributo descritivo do model na URL ao invés do `id` dele. Há várias formas de conseguir isso:
 <sup>[[link](#user-friendly-urls)]</sup>
-
-  * Override the `to_param` method of the model. This method is used by Rails
-    for constructing a URL to the object.  The default implementation returns
-    the `id` of the record as a String.  It could be overridden to include another
-    human-readable attribute.
+  
+  * Sobrescrever o método `to_param` do model. Esse método é usado pelo Rails para construir a URL do objeto. A implementação padrão retorna o `id` do registro como String. Ela poderia ser sobrescrita para incluir outro atributo mais legível. 
 
       ```Ruby
       class Person
@@ -468,12 +465,9 @@ Eu não inventei essas regras do nada - elas são baseadas principalmente na min
       end
       ```
 
-  In order to convert this to a URL-friendly value, `parameterize` should be
-  called on the string. The `id` of the object needs to be at the beginning so
-  that it can be found by the `find` method of ActiveRecord.
+  Para deixar esse valor num formato compatível com URLs, você deve chamar `parameterize` na string. O `id` do objeto precisa estar no começo para que ele possa ser encontrado pelo método `find` do ActiveRecord.
 
-  * Use the `friendly_id` gem. It allows creation of human-readable URLs by
-    using some descriptive attribute of the model instead of its `id`.
+  * Usar a gem `friendly_id`. Ela permite a criação de URLs legíveis através do uso de algum atributo descritivo do model ao invés do seu `id`.
 
       ```Ruby
       class Person
@@ -482,20 +476,15 @@ Eu não inventei essas regras do nada - elas são baseadas principalmente na min
       end
       ```
 
-  Check the [gem documentation](https://github.com/norman/friendly_id) for more
-  information about its usage.
+  Veja a [documentação da gem](https://github.com/norman/friendly_id) para mais informações sobre como usá-la.
 
 * <a name="find-each"></a>
-  Use `find_each` to iterate over a collection of AR objects. Looping through a
-  collection of records from the database (using the `all` method, for example)
-  is very inefficient since it will try to instantiate all the objects at once.
-  In that case, batch processing methods allow you to work with the records in
-  batches, thereby greatly reducing memory consumption.
+  Use `find_each` para iterar sobre uma coleção de objetos AR. Iterar sobre uma coleção de registros do banco de dados (usando o método `all`, por exemplo) é muito ineficiente, porque o AR tentará instanciar todos os objetos de uma vez. Nesse caso, métodos de processamento em batch permitem que você trabalhe com os registros em batches, dessa forma reduzindo muito o consumo de memória.
 <sup>[[link](#find-each)]</sup>
 
 
   ```Ruby
-  # bad
+  # ruim
   Person.all.each do |person|
     person.do_awesome_stuff
   end
@@ -504,7 +493,7 @@ Eu não inventei essas regras do nada - elas são baseadas principalmente na min
     person.party_all_night!
   end
 
-  # good
+  # bom
   Person.find_each do |person|
     person.do_awesome_stuff
   end
@@ -515,13 +504,11 @@ Eu não inventei essas regras do nada - elas são baseadas principalmente na min
   ```
 
 * <a name="before_destroy"></a>
-  Since [Rails creates callbacks for dependent
-  associations](https://github.com/rails/rails/issues/3458), always call
-  `before_destroy` callbacks that perform validation with `prepend: true`.
+  Como o [Rails cria callbacks para associações dependentes](https://github.com/rails/rails/issues/3458), sempre chame callbacks `before_destroy` que realizem validações com `prepend: true`.
 <sup>[[link](#before_destroy)]</sup>
 
   ```Ruby
-  # bad (roles will be deleted automatically even if super_admin? is true)
+  # ruim (roles vão ser deletados automaticamente mesmo que super_admin? seja true)
   has_many :roles, dependent: :destroy
 
   before_destroy :ensure_deletable
@@ -530,7 +517,7 @@ Eu não inventei essas regras do nada - elas são baseadas principalmente na min
     fail "Cannot delete super admin." if super_admin?
   end
 
-  # good
+  # bom
   has_many :roles, dependent: :destroy
 
   before_destroy :ensure_deletable, prepend: true
@@ -540,35 +527,32 @@ Eu não inventei essas regras do nada - elas são baseadas principalmente na min
   end
   ```
 
-### ActiveRecord Queries
+### Queries do ActiveRecord
 
 * <a name="avoid-interpolation"></a>
-  Avoid string interpolation in
-  queries, as it will make your code susceptible to SQL injection
-  attacks.
+  Evite usar interpolação de strings em queries, porque isso deixa seu código suscetível a SQL injection.
 <sup>[[link](#avoid-interpolation)]</sup>
 
   ```Ruby
-  # bad - param will be interpolated unescaped
+  # ruim - param será interpolado sem ser escapado
   Client.where("orders_count = #{params[:orders]}")
 
-  # good - param will be properly escaped
+  # bom - param será escapado adequadamente
   Client.where('orders_count = ?', params[:orders])
   ```
 
 * <a name="named-placeholder"></a>
-  Consider using named placeholders instead of positional placeholders
-  when you have more than 1 placeholder in your query.
+  Considere usar placeholders nomeados ao invés de placeholders posicionais quando você tiver mais de 1 placeholder na sua query.
 <sup>[[link](#named-placeholder)]</sup>
 
   ```Ruby
-  # okish
+  # mais ou menos
   Client.where(
     'created_at >= ? AND created_at <= ?',
     params[:start_date], params[:end_date]
   )
 
-  # good
+  # bom
   Client.where(
     'created_at >= :start_date AND created_at <= :end_date',
     start_date: params[:start_date], end_date: params[:end_date]
@@ -576,64 +560,59 @@ Eu não inventei essas regras do nada - elas são baseadas principalmente na min
   ```
 
 * <a name="find"></a>
-  Favor the use of `find` over `where`
-when you need to retrieve a single record by id.
+  Prefira usar `find` ao invés de `where` quando você precisar obter um único registro pelo seu id.
 <sup>[[link](#find)]</sup>
 
   ```Ruby
-  # bad
+  # ruim
   User.where(id: id).take
 
-  # good
+  # bom
   User.find(id)
   ```
 
 * <a name="find_by"></a>
-  Favor the use of `find_by` over `where`
-when you need to retrieve a single record by some attributes.
+  Prefira usar `find_by` ao invés de `where` quando você precisar obter um único registro por alguns atributos.
 <sup>[[link](#find_by)]</sup>
 
   ```Ruby
-  # bad
+  # ruim
   User.where(first_name: 'Bruce', last_name: 'Wayne').first
 
-  # good
+  # bom
   User.find_by(first_name: 'Bruce', last_name: 'Wayne')
   ```
 
 * <a name="find_each"></a>
-  Use `find_each` when you need to process a lot of records.
+  Use `find_each` quando você precisar processar muitos registros.
 <sup>[[link](#find_each)]</sup>
 
   ```Ruby
-  # bad - loads all the records at once
-  # This is very inefficient when the users table has thousands of rows.
+  # ruim - carrega todos os registros de uma vez
+  # Isso é muito ineficiente caso a tabela de users tenha milhares de linhas.
   User.all.each do |user|
     NewsMailer.weekly(user).deliver_now
   end
 
-  # good - records are retrieved in batches
+  # bom - registros são obtidos em batches
   User.find_each do |user|
     NewsMailer.weekly(user).deliver_now
   end
   ```
 
 * <a name="where-not"></a>
-  Favor the use of `where.not` over SQL.
+  Prefira usar `where.not` ao invés de SQL.
 <sup>[[link](#where-not)]</sup>
 
   ```Ruby
-  # bad
+  # ruim
   User.where("id != ?", id)
 
-  # good
+  # bom
   User.where.not(id: id)
   ```
 * <a name="squished-heredocs"></a>
-  When specifying an explicit query in a method such as `find_by_sql`, use
-  heredocs with `squish`. This allows you to legibly format the SQL with
-  line breaks and indentations, while supporting syntax highlighting in many
-  tools (including GitHub, Atom, and RubyMine).
+  Quando especificar uma query explícita num método como `find_by_sql`, use heredocs com `squish`. Isso permite que você formate o SQL de forma legível com quebras de linha e identações, ao mesmo tempo em que suporta o realce de sintaxe em diversas ferramentas (inclusive o GitHub, Atom e RubyMine).
 <sup>[[link](#squished-heredocs)]</sup>
 
   ```Ruby
@@ -646,59 +625,51 @@ when you need to retrieve a single record by some attributes.
       accounts
     ON
       accounts.user_id = users.id
-    # further complexities...
+    # outras complexidades...
   SQL
   ```
 
-  [`String#squish`](http://apidock.com/rails/String/squish) removes the indentation and newline characters so that your server
-  log shows a fluid string of SQL rather than something like this:
+  O método [`String#squish`](http://apidock.com/rails/String/squish) remove a identação e quebras de linha; dessa forma o log do seu servidor vai mostrar uma string fluida de SQL ao invés de algo assim:
 
   ```
   SELECT\n    users.id, accounts.plan\n  FROM\n    users\n  INNER JOIN\n    acounts\n  ON\n    accounts.user_id = users.id
   ```
 
-## Migrations
+## Migrações
 
 * <a name="schema-version"></a>
-  Keep the `schema.rb` (or `structure.sql`) under version control.
+  Mantenha o arquivo `schema.rb` (ou `structure.sql`) sob controle de versão.
 <sup>[[link](#schema-version)]</sup>
 
 * <a name="db-schema-load"></a>
-  Use `rake db:schema:load` instead of `rake db:migrate` to initialize an empty
-  database.
+  Use `rake db:schema:load` ao invés de `rake db:migrate` para inicializar um banco de dados vazio.
 <sup>[[link](#db-schema-load)]</sup>
 
 * <a name="default-migration-values"></a>
-  Enforce default values in the migrations themselves instead of in the
-  application layer.
+  Imponha valores default nas próprias migrações ao invés de fazê-lo na camada de aplicação.
 <sup>[[link](#default-migration-values)]</sup>
 
   ```Ruby
-  # bad - application enforced default value
+  # ruim - valor default definido na aplicação
   def amount
     self[:amount] or 0
   end
   ```
 
-  While enforcing table defaults only in Rails is suggested by many
-  Rails developers, it's an extremely brittle approach that
-  leaves your data vulnerable to many application bugs.  And you'll
-  have to consider the fact that most non-trivial apps share a
-  database with other applications, so imposing data integrity from
-  the Rails app is impossible.
+  Apesar de muitos desenvolvedores sugerirem a definição de padrões de tabelas apenas no Rails, isso é uma abordagem extremamente frágil, que deixa seus dados vulneráveis a diversos bugs da aplicação. E há de se considerar o fato de que a maioria dos apps não-triviais compartilha um banco de dados com outras aplicações, então impor a integridade dos dados a partir do app Rails é impossível.
 
 * <a name="foreign-key-constraints"></a>
-  Enforce foreign-key constraints. As of Rails 4.2, ActiveRecord
-  supports foreign key constraints natively.
+  Imponha restrições de chave estrangeira. A partir da versão 4.2, o ActiveRecord suporta restrições de chave estrangeira nativamente.
   <sup>[[link](#foreign-key-constraints)]</sup>
 
 * <a name="change-vs-up-down"></a>
   When writing constructive migrations (adding tables or columns),
   use the `change` method instead of `up` and `down` methods.
+  Quando estiver escrevendo migrações construtivas (acrescentando tabelas ou colunas), use o método `change` ao invés dos métodos `up` e `down`.
   <sup>[[link](#change-vs-up-down)]</sup>
 
   ```Ruby
-  # the old way
+  # o jeito antigo
   class AddNameToPeople < ActiveRecord::Migration
     def up
       add_column :people, :name, :string
@@ -709,7 +680,7 @@ when you need to retrieve a single record by some attributes.
     end
   end
 
-  # the new prefered way
+  # o novo jeito preferencial
   class AddNameToPeople < ActiveRecord::Migration
     def change
       add_column :people, :name, :string
@@ -718,37 +689,31 @@ when you need to retrieve a single record by some attributes.
   ```
 
 * <a name="no-model-class-migrations"></a>
-  Don't use model classes in migrations. The model classes are constantly
-  evolving and at some point in the future migrations that used to work might
-  stop, because of changes in the models used.
+  Não use classes do model em migrações. As classes do model estão constantemente evoluindo e em algum ponto do futuro as migrações que funcionavam podem parar de funcionar, por causa de mudanças nos models usados.
 <sup>[[link](#no-model-class-migrations)]</sup>
 
 ## Views
 
 * <a name="no-direct-model-view"></a>
-  Never call the model layer directly from a view.
+  Nunca invoque a camada do model diretamente de uma view.
 <sup>[[link](#no-direct-model-view)]</sup>
 
 * <a name="no-complex-view-formatting"></a>
-  Never make complex formatting in the views, export the formatting to a method
-  in the view helper or the model.
+  Nunca faça formatações complexas nas views; exporte a formatação para um método no helper da view ou no model.
 <sup>[[link](#no-complex-view-formatting)]</sup>
 
 * <a name="partials"></a>
-  Mitigate code duplication by using partial templates and layouts.
+  Reduza a duplicação de código através do uso de templates e layouts parciais.
 <sup>[[link](#partials)]</sup>
 
-## Internationalization
+## Internacionalização
 
 * <a name="locale-texts"></a>
-  No strings or other locale specific settings should be used in the views,
-  models and controllers. These texts should be moved to the locale files in the
-  `config/locales` directory.
+  Nenhuma string ou outras configurações específicas da região devem ser usadas nas views, models e controllers. Esses textos devem ser movidos para os arquivos regionais na pasta `config/locales`.
 <sup>[[link](#locale-texts)]</sup>
 
 * <a name="translated-labels"></a>
-  When the labels of an ActiveRecord model need to be translated, use the
-  `activerecord` scope:
+  Quando os labels de um model do ActiveRecord precisarem ser traduzidos, use o escopo `activerecord`:
 <sup>[[link](#translated-labels)]</sup>
 
   ```
@@ -761,20 +726,13 @@ when you need to retrieve a single record by some attributes.
           name: 'Full name'
   ```
 
-  Then `User.model_name.human` will return "Member" and
-  `User.human_attribute_name("name")` will return "Full name". These
-  translations of the attributes will be used as labels in the views.
-
+  Dessa forma, `User.model_name.human` vai retornar "Member" e `User.human_attribute_name("name")` vai retornar "Full name". Essas traduções dos atributos serão utilizadas como labels nas views.
 
 * <a name="organize-locale-files"></a>
-  Separate the texts used in the views from translations of ActiveRecord
-  attributes. Place the locale files for the models in a folder `models` and the
-  texts used in the views in folder `views`.
+  Separe os textos usados nas views das traduções de atributos do ActiveRecord. Coloque os arquilos regionais dos models numa pasta `models` e os textos usados nas views numa pasta `views`.
 <sup>[[link](#organize-locale-files)]</sup>
 
-  * When organization of the locale files is done with additional directories,
-    these directories must be described in the `application.rb` file in order
-    to be loaded.
+  * Quando a organização dos arquivos regionais é feita com diretórios adicionais, esses diretórios devem ser descritos no arquivo `application.rb` para poderem ser carregados. 
 
       ```Ruby
       # config/application.rb
@@ -782,18 +740,15 @@ when you need to retrieve a single record by some attributes.
       ```
 
 * <a name="shared-localization"></a>
-  Place the shared localization options, such as date or currency formats, in
-  files under the root of the `locales` directory.
+  Coloque as opções compartilhadas de localização, como data ou formatos de moeda, em arquivos no root da pasta `locales`.
 <sup>[[link](#shared-localization)]</sup>
 
 * <a name="short-i18n"></a>
-  Use the short form of the I18n methods: `I18n.t` instead of `I18n.translate`
-  and `I18n.l` instead of `I18n.localize`.
+  Use a forma abreviada dos métodos de I18n: `I18n.t` ao invés de `I18n.translate` e `I18n.l` ao invés de `I18n.localize`.
 <sup>[[link](#short-i18n)]</sup>
 
 * <a name="lazy-lookup"></a>
-  Use "lazy" lookup for the texts used in views. Let's say we have the following
-  structure:
+  Use a busca "preguiçosa" por textos usados nas views. Vamos supor que nós temos a seguinte estrutura:
 <sup>[[link](#lazy-lookup)]</sup>
 
   ```
@@ -803,54 +758,46 @@ when you need to retrieve a single record by some attributes.
         title: 'User details page'
   ```
 
-  The value for `users.show.title` can be looked up in the template
-  `app/views/users/show.html.haml` like this:
+  O valor de `users.show.title` pode ser buscado no template `app/views/users/show.html.haml` assim:
 
   ```Ruby
   = t '.title'
   ```
 
 * <a name="dot-separated-keys"></a>
-  Use the dot-separated keys in the controllers and models instead of specifying
-  the `:scope` option. The dot-separated call is easier to read and trace the
-  hierarchy.
+  Use as chaves separadas por pontos nos controllers e models ao invés de especificar a opção `:scope`. A chamada separada por pontos é mais fácil de ler e de traçar a hierarquia.
 <sup>[[link](#dot-separated-keys)]</sup>
 
   ```Ruby
-  # bad
+  # ruim
   I18n.t :record_invalid, :scope => [:activerecord, :errors, :messages]
 
-  # good
+  # bom
   I18n.t 'activerecord.errors.messages.record_invalid'
   ```
 
 * <a name="i18n-guides"></a>
-  More detailed information about the Rails I18n can be found in the [Rails
-  Guides](http://guides.rubyonrails.org/i18n.html)
+  Mais informações sobre o I18n do Rails pode ser encontrada nos [Guias do Rails](http://guides.rubyonrails.org/i18n.html).
 <sup>[[link](#i18n-guides)]</sup>
 
 ## Assets
 
-Use the [assets pipeline](http://guides.rubyonrails.org/asset_pipeline.html) to leverage organization within
-your application.
+Use o [pipeline de assets](http://guides.rubyonrails.org/asset_pipeline.html) para maximizar a organização dentro da sua aplicação.
 
 * <a name="reserve-app-assets"></a>
-  Reserve `app/assets` for custom stylesheets, javascripts, or images.
+  Reserve a pasta `app/assets` para stylesheets, javascripts ou imagens customizadas.
 <sup>[[link](#reserve-app-assets)]</sup>
 
 * <a name="lib-assets"></a>
-  Use `lib/assets` for your own libraries that don’t really fit into the
-  scope of the application.
+  Use a pasta `lib/assets` para suas próprias bibliotecas que não se encaixam muito bem no escopo da aplicação.
 <sup>[[link](#lib-assets)]</sup>
 
 * <a name="vendor-assets"></a>
-  Third party code such as [jQuery](http://jquery.com/) or
-  [bootstrap](http://twitter.github.com/bootstrap/) should be placed in
-  `vendor/assets`.
+  Códigos de terceiros, como o [jQuery](http://jquery.com/) ou [bootstrap](http://twitter.github.com/bootstrap/), devem ser colocados na pasta `vendor/assets`.
 <sup>[[link](#vendor-assets)]</sup>
 
 * <a name="gem-assets"></a>
-  When possible, use gemified versions of assets (e.g.
+  Quando possível, use versões "gemificadas" dos assets (i.e.,
   [jquery-rails](https://github.com/rails/jquery-rails),
   [jquery-ui-rails](https://github.com/joliss/jquery-ui-rails),
   [bootstrap-sass](https://github.com/thomas-mcdonald/bootstrap-sass),
@@ -860,18 +807,15 @@ your application.
 ## Mailers
 
 * <a name="mailer-name"></a>
-  Name the mailers `SomethingMailer`. Without the Mailer suffix it isn't
-  immediately apparent what's a mailer and which views are related to the
-  mailer.
+  Nomeie os mailers como `SomethingMailer`. Sem o sufixo "Mailer", não fica imediatamente aparente o que é um mailer e quais views são relacionadas ao mailer.
 <sup>[[link](#mailer-name)]</sup>
 
 * <a name="html-plain-email"></a>
-  Provide both HTML and plain-text view templates.
+  Forneça templates tanto em HTML quando em texto puro.
 <sup>[[link](#html-plain-email)]</sup>
 
 * <a name="enable-delivery-errors"></a>
-  Enable errors raised on failed mail delivery in your development environment.
-  The errors are disabled by default.
+  Habilite os erros lançados quando há falhas no envio de emails no seu ambiente de desenvolvimento. Esses erros são desabilitados por padrão.
 <sup>[[link](#enable-delivery-errors)]</sup>
 
   ```Ruby
@@ -881,9 +825,7 @@ your application.
   ```
 
 * <a name="local-smtp"></a>
-  Use a local SMTP server like
-  [Mailcatcher](https://github.com/sj26/mailcatcher) in the development
-  environment.
+  Use um servidor SMTP local como o [Mailcatcher](https://github.com/sj26/mailcatcher) no ambiente de desenvolvimento.
 <sup>[[link](#local-smtp)]</sup>
 
   ```Ruby
@@ -892,12 +834,12 @@ your application.
   config.action_mailer.smtp_settings = {
     address: 'localhost',
     port: 1025,
-    # more settings
+    # mais configurações
   }
   ```
 
 * <a name="default-hostname"></a>
-  Provide default settings for the host name.
+  Forneça configurações padrão para o nome do host.
 <sup>[[link](#default-hostname)]</sup>
 
   ```Ruby
@@ -907,38 +849,35 @@ your application.
   # config/environments/production.rb
   config.action_mailer.default_url_options = { host: 'your_site.com' }
 
-  # in your mailer class
+  # na sua classe mailer
   default_url_options[:host] = 'your_site.com'
   ```
 
 * <a name="url-not-path-in-email"></a>
-  If you need to use a link to your site in an email, always use the `_url`, not
-  `_path` methods. The `_url` methods include the host name and the `_path`
-  methods don't.
+  Se você precisar usar um link para o seu site num e-mail, sempre use os métodos `_url`, não os métodos `_path`. Os métodos `_url` incluem o nome do host e os métodos `_path` não.
 <sup>[[link](#url-not-path-in-email)]</sup>
 
   ```Ruby
-  # bad
+  # ruim
   You can always find more info about this course
   <%= link_to 'here', course_path(@course) %>
 
-  # good
+  # bom
   You can always find more info about this course
   <%= link_to 'here', course_url(@course) %>
   ```
 
 * <a name="email-addresses"></a>
-  Format the from and to addresses properly. Use the following format:
+  Formate os endereços `de` e `para` adequadamente. Use o seguinte formato:
 <sup>[[link](#email-addresses)]</sup>
 
   ```Ruby
-  # in your mailer class
+  # na sua classe mailer
   default from: 'Your Name <info@your_site.com>'
   ```
 
 * <a name="delivery-method-test"></a>
-  Make sure that the e-mail delivery method for your test environment is set to
-  `test`:
+  Certifique-se de que o método de envio de e-mails para o seu ambiente de desenvolvimento está definido como `test`:
 <sup>[[link](#delivery-method-test)]</sup>
 
   ```Ruby
@@ -948,7 +887,7 @@ your application.
   ```
 
 * <a name="delivery-method-smtp"></a>
-  The delivery method for development and production should be `smtp`:
+  O método de envio para desenvolvimento e produção deve ser `smtp`:
 <sup>[[link](#delivery-method-smtp)]</sup>
 
   ```Ruby
@@ -958,76 +897,62 @@ your application.
   ```
 
 * <a name="inline-email-styles"></a>
-  When sending html emails all styles should be inline, as some mail clients
-  have problems with external styles. This however makes them harder to maintain
-  and leads to code duplication. There are two similar gems that transform the
-  styles and put them in the corresponding html tags:
-  [premailer-rails](https://github.com/fphilipe/premailer-rails) and
-  [roadie](https://github.com/Mange/roadie).
+  Quando enviar e-mails HTML, todos os estilos devem estar inline, porque alguns clientes de e-mail têm problemas com estilos externos. No entanto, isso torna os templates mais difíceis de manter e leva a duplicação de código. Existem duas gems similares que transformam os estilos e os colocam nas tags HTML correspondentes: [premailer-rails](https://github.com/fphilipe/premailer-rails) e [roadie](https://github.com/Mange/roadie).
 <sup>[[link](#inline-email-styles)]</sup>
 
 * <a name="background-email"></a>
-  Sending emails while generating page response should be avoided. It causes
-  delays in loading of the page and request can timeout if multiple email are
-  sent. To overcome this emails can be sent in background process with the help
-  of [sidekiq](https://github.com/mperham/sidekiq) gem.
+  Enviar e-mails enquanto gera páginas de resposta deve ser evitado. Isso causa atrados no carregamento da página e a requisição pode exceder o tempo limite se múltiplos e-mails estão sendo enviados. Para superar isso, os e-mails podem ser enviados em processos de segundo placo com a ajuda da gem [sidekiq](https://github.com/mperham/sidekiq).
 <sup>[[link](#background-email)]</sup>
 
-## Time
+## Hora
 
 * <a name="tz-config"></a>
-  Config your timezone accordingly in `application.rb`.
+  Configure seu fuso horário adequadamente em `application.rb`.
 <sup>[[link](#tz-config)]</sup>
 
   ```Ruby
   config.time_zone = 'Eastern European Time'
-  # optional - note it can be only :utc or :local (default is :utc)
+  # opcional - note que isso pode ser apenas :utc ou :local (o padrão é :utc)
   config.active_record.default_timezone = :local
   ```
 
 * <a name="time-parse"></a>
-  Don't use `Time.parse`.
+  Não use `Time.parse`.
 <sup>[[link](#time-parse)]</sup>
 
   ```Ruby
-  # bad
-  Time.parse('2015-03-02 19:05:37') # => Will assume time string given is in the system's time zone.
+  # ruim
+  Time.parse('2015-03-02 19:05:37') # => Vai assumir que a string dada está no fuso horário do sistema.
 
-  # good
+  # bom
   Time.zone.parse('2015-03-02 19:05:37') # => Mon, 02 Mar 2015 19:05:37 EET +02:00
   ```
 
 * <a name="time-now"></a>
-  Don't use `Time.now`.
+  Não use `Time.now`.
 <sup>[[link](#time-now)]</sup>
 
   ```Ruby
-  # bad
-  Time.now # => Returns system time and ignores your configured time zone.
+  # ruim
+  Time.now # => Retorna o horário do sistema e ignora o fuso horário configurado.
 
-  # good
+  # bom
   Time.zone.now # => Fri, 12 Mar 2014 22:04:47 EET +02:00
-  Time.current # Same thing but shorter.
+  Time.current # Mesma coisa, mas mais curto.
   ```
 
 ## Bundler
 
 * <a name="dev-test-gems"></a>
-  Put gems used only for development or testing in the appropriate group in the
-  Gemfile.
+  Coloque as gems usadas só para desenvolvimento ou teste nos grupos apropriados no Gemfile.
 <sup>[[link](#dev-test-gems)]</sup>
 
 * <a name="only-good-gems"></a>
-  Use only established gems in your projects. If you're contemplating on
-  including some little-known gem you should do a careful review of its source
-  code first.
+  Use apenas gems estabelecidas nos seus projetos. Se você estiver considerando incluir alguma gem pouco conhecida, você deve fazer uma revisão cuidadosa do código fonte dela primeiro.
 <sup>[[link](#only-good-gems)]</sup>
 
 * <a name="os-specific-gemfile-locks"></a>
-  OS-specific gems will by default result in a constantly changing
-  `Gemfile.lock` for projects with multiple developers using different operating
-  systems.  Add all OS X specific gems to a `darwin` group in the Gemfile, and
-  all Linux specific gems to a `linux` group:
+  Gems específicas de um sistema operacional vão por padrão resultar num `Gemfile.lock` constantemente mudando para múltiplos desenvolvedores usando diferentes sistemas operacionais. Coloque todas as gems específicas do OS X num grupo chamado `darwin` no Gemfile, e todas as gems específicas do Linux num grupo chamado `linux`:
 <sup>[[link](#os-specific-gemfile-locks)]</sup>
 
   ```Ruby
@@ -1042,8 +967,7 @@ your application.
   end
   ```
 
-  To require the appropriate gems in the right environment, add the
-  following to `config/application.rb`:
+  Para carregar as gems apropriadas no ambiente certo, coloque o sequinte em `config/application.rb`:
 
   ```Ruby
   platform = RUBY_PLATFORM.match(/(linux|darwin)/)[0].to_sym
@@ -1051,47 +975,32 @@ your application.
   ```
 
 * <a name="gemfile-lock"></a>
-  Do not remove the `Gemfile.lock` from version control. This is not some
-  randomly generated file - it makes sure that all of your team members get the
-  same gem versions when they do a `bundle install`.
+  Não tire o `Gemfile.lock` do controle de versão. Esse arquivo não é um arquivo qualquer gerado aleatoriamente - ele garante que todos os membros da sua equipe tenham as mesmas versões das gem quando eles fizerem `bundle install`.
 <sup>[[link](#gemfile-lock)]</sup>
 
-## Flawed Gems
+## Gems problemáticas
 
-This is a list of gems that are either problematic or superseded by
-other gems. You should avoid using them in your projects.
+Essa é uma lista de gem que, ou são problemáticas, ou foram suplantadas por outras gems. Você deve evitar usá-las nos seus projetos.
 
-* [rmagick](http://rmagick.rubyforge.org/) - this gem is notorious for its
-  memory consumption. Use
-  [minimagick](https://github.com/minimagick/minimagick) instead.
+* [rmagick](http://rmagick.rubyforge.org/) - essa gem é famosa por seu consumo de memória. Use [minimagick](https://github.com/minimagick/minimagick) ao invés dela.
 
-* [autotest](http://www.zenspider.com/ZSS/Products/ZenTest/) - old solution for
-  running tests automatically. Far inferior to
-  [guard](https://github.com/guard/guard) and
-  [watchr](https://github.com/mynyml/watchr).
+* [autotest](http://www.zenspider.com/ZSS/Products/ZenTest/) - antiga solução para rodar testes automaticamente. Muito inferior a [guard](https://github.com/guard/guard) ou [watchr](https://github.com/mynyml/watchr).
 
-* [rcov](https://github.com/relevance/rcov) - code coverage tool, not compatible
-  with Ruby 1.9. Use [SimpleCov](https://github.com/colszowka/simplecov)
-  instead.
+* [rcov](https://github.com/relevance/rcov) - ferramenta de cobertura de código, não compatível com Ruby 1.9. Use [SimpleCov](https://github.com/colszowka/simplecov) no lugar dela.
 
-* [therubyracer](https://github.com/cowboyd/therubyracer) - the use of this gem
-  in production is strongly discouraged as it uses a very large amount of
-  memory. I'd suggest using `node.js` instead.
+* [therubyracer](https://github.com/cowboyd/therubyracer) - o uso dessa gem em produção é fortemente desencorajado porque ela usa uma grante quantidade de memória. Eu sugeriria usar `node.js` ao invés dela.
 
-This list is also a work in progress. Please, let me know if you know other
-popular, but flawed gems.
+Essa lista também é um trabalho em andamento. Por favor, me fale caso você saiba de outras gem populares, mas problemáticas.
 
-## Managing processes
+## Gerenciando processos
 
 * <a name="foreman"></a>
-  If your projects depends on various external processes use
-  [foreman](https://github.com/ddollar/foreman) to manage them.
+  Se seus projetos dependem de vários processos externos, use [foreman](https://github.com/ddollar/foreman) para gerenciá-los.
 <sup>[[link](#foreman)]</sup>
 
-# Further Reading
+# Leituras adicionais
 
-There are a few excellent resources on Rails style, that you should consider if
-you have time to spare:
+Existem alguns recursos excelentes sobre o estilo em Rails, que você deveria considerar olhar caso tenha tempo livre:
 
 * [The Rails 4 Way](http://www.amazon.com/The-Rails-Addison-Wesley-Professional-Ruby/dp/0321944275)
 * [Ruby on Rails Guides](http://guides.rubyonrails.org/)
@@ -1100,36 +1009,29 @@ you have time to spare:
 * [Everyday Rails Testing with RSpec](https://leanpub.com/everydayrailsrspec)
 * [Better Specs for RSpec](http://betterspecs.org)
 
-# Contributing
+# Contribuindo
 
-Nothing written in this guide is set in stone. It's my desire to work together
-with everyone interested in Rails coding style, so that we could ultimately
-create a resource that will be beneficial to the entire Ruby community.
+Nada que está escrito nesse guia é imutável. É meu desejo trabalhar junto com todos que estejam interessados no estilo de codificação em Rails, para que nós possamos ultimamente criar um recurso que será benéfico para a comunidade Ruby inteira.
 
-Feel free to open tickets or send pull requests with improvements. Thanks in
-advance for your help!
+Sinta-se livre para abrir tickets ou pull requests com melhorias. Obrigado desde já pela sua ajuda!
 
-You can also support the project (and RuboCop) with financial contributions via
-[gittip](https://www.gittip.com/bbatsov).
+Você também pode apoiar o projeto (e o RuboCop) com contribuições financeiras através do [gittip](https://www.gittip.com/bbatsov).
 
-[![Support via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/bbatsov)
+[![Contribuir via Gittip](https://rawgithub.com/twolfson/gittip-badge/0.2.0/dist/gittip.png)](https://www.gittip.com/bbatsov)
 
-## How to Contribute?
+## Como contribuir?
 
-It's easy, just follow the [contribution guidelines](https://github.com/bbatsov/rails-style-guide/blob/master/CONTRIBUTING.md).
+É simples, basta seguir as [diretrizes de contribuição](https://github.com/bbatsov/rails-style-guide/blob/master/CONTRIBUTING.md).
 
-# License
+# Licença
 
 ![Creative Commons License](http://i.creativecommons.org/l/by/3.0/88x31.png)
 This work is licensed under a [Creative Commons Attribution 3.0 Unported
 License](http://creativecommons.org/licenses/by/3.0/deed.en_US)
 
-# Spread the Word
+# Espalhe
 
-A community-driven style guide is of little use to a community that doesn't know
-about its existence. Tweet about the guide, share it with your friends and
-colleagues. Every comment, suggestion or opinion we get makes the guide just a
-little bit better. And we want to have the best possible guide, don't we?
+Um guia de estilo criado pela comunidade não serve pra muita coisa numa comunidade que não sabe que ele existe. Tuite sobre o guia, compartilhe com seus amigos e colegas. Cada comentário, sugestão ou opinião que nós recebemos torna o guia um pouquinho melhor. E nós queremos ter o melhor guia possível, não é?
 
 Cheers,<br/>
 [Bozhidar](https://twitter.com/bbatsov)
